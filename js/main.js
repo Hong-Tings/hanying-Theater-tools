@@ -4,6 +4,29 @@ const PLAYER_API_BASE = 'https://api.huaxu.app/servers/cn/players';
 let currentWeek = 568;
 let currentDifficulty = '16';
 
+// 模拟浏览器请求头
+const REQUEST_HEADERS = {
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+};
+
+// 带请求头的fetch封装
+async function fetchWithHeaders(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: REQUEST_HEADERS,
+        mode: 'cors',
+        credentials: 'omit'
+    });
+    return response;
+}
+
 // 计算日期范围（战区每周一刷新）
 function getWeekDateRange(week) {
     // 基准日期：第1周的开始日期（需要根据实际情况调整）
@@ -197,7 +220,7 @@ function updateHeader(data) {
 async function loadWarzoneData() {
     try {
         const url = `${WARZONE_API_BASE}/${currentWeek}/${currentDifficulty}`;
-        const response = await fetch(url);
+        const response = await fetchWithHeaders(url);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.warzone) {
@@ -229,7 +252,7 @@ async function loadWarzoneData() {
 async function loadPlayerData(playerId) {
     try {
         const url = `${PLAYER_API_BASE}/${playerId}`;
-        const response = await fetch(url);
+        const response = await fetchWithHeaders(url);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.player) {
