@@ -9,8 +9,17 @@ const ELEMENT_MAP = {
     'ice': 'physical'  // 默认使用physical样式
 };
 
-// 获取元素类型对应的CSS类
-function getElementClass(element) {
+// 根据战区名称获取元素类型CSS类
+function getElementClassByName(zoneName) {
+    if (zoneName.includes('火焰') || zoneName.includes('火')) return 'fire';
+    if (zoneName.includes('机械') || zoneName.includes('物理')) return 'physical';
+    if (zoneName.includes('镭射') || zoneName.includes('蚀刃') || zoneName.includes('熵钟')) return 'thunder';
+    return 'physical';
+}
+
+// 获取元素类型对应的CSS类（优先从名称判断）
+function getElementClass(element, zoneName) {
+    if (zoneName) return getElementClassByName(zoneName);
     return ELEMENT_MAP[element] || 'physical';
 }
 
@@ -33,7 +42,7 @@ function formatTime(timeStr) {
 
 // 创建战区卡片HTML
 function createZoneCard(zone) {
-    const elementClass = getElementClass(zone.element);
+    const elementClass = getElementClass(zone.element, zone.name);
 
     let buffsHtml = '';
     if (zone.buffs && zone.buffs.length > 0) {
@@ -104,7 +113,7 @@ function renderZones(zones) {
 
     zones.forEach(zone => {
         // 判断是否为混合区（包含多个增益）
-        if (zone.buffs && zone.buffs.length > 2) {
+        if (zone.buffs && zone.buffs.length >= 2) {
             html += `
                 <div class="mixed-zone">
                     <div class="mixed-zone-header">
@@ -146,8 +155,13 @@ function renderRankings(rankings) {
 
     rankings.slice(0, 100).forEach(ranking => {
         const rankClass = ranking.rank <= 3 ? `top-${ranking.rank}` : '';
-        const zoneName = ranking.zones && ranking.zones[0] ?
-            getZoneNameById(ranking.zones[0].id) : '--';
+        // 找到玩家得分最高的战区
+        let bestZone = null;
+        if (ranking.zones && ranking.zones.length > 0) {
+            bestZone = ranking.zones.reduce((best, z) =>
+                z.score > best.score ? z : best, ranking.zones[0]);
+        }
+        const zoneName = bestZone ? getZoneNameById(bestZone.id) : '--';
         const zoneClass = getZoneClass(zoneName);
 
         html += `
@@ -190,6 +204,7 @@ async function loadData() {
 
         if (result.status === 'success' && result.data && result.data.warzone) {
             const warzone = result.data.warzone;
+            const rankings = result.data.rankings;
 
             // 保存zones数据
             zonesData = warzone.area.zones;
@@ -201,7 +216,9 @@ async function loadData() {
             renderZones(warzone.area.zones);
 
             // 渲染排行榜
-            renderRankings(warzone.rankings);
+            if (rankings) {
+                renderRankings(rankings);
+            }
         } else {
             console.error('API返回数据格式错误:', result);
         }
