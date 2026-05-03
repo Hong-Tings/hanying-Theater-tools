@@ -1,5 +1,7 @@
 // API配置
-const API_URL = 'https://api.huaxu.app/servers/cn/warzone/current/16';
+const API_BASE = 'https://api.huaxu.app/servers';
+let currentServer = 'cn';
+let currentChallenge = '16';
 
 // 格式化数字
 function formatNumber(num) {
@@ -163,7 +165,8 @@ function updateHeader(data) {
 // 加载数据
 async function loadData() {
     try {
-        const response = await fetch(API_URL);
+        const url = `${API_BASE}/${currentServer}/warzone/current/${currentChallenge}`;
+        const response = await fetch(url);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.warzone) {
@@ -191,5 +194,27 @@ async function loadData() {
     }
 }
 
+// 初始化选择器
+function initSelectors() {
+    const serverSelect = document.getElementById('serverSelect');
+    const challengeSelect = document.getElementById('challengeSelect');
+
+    serverSelect.value = currentServer;
+    challengeSelect.value = currentChallenge;
+
+    serverSelect.addEventListener('change', (e) => {
+        currentServer = e.target.value;
+        loadData();
+    });
+
+    challengeSelect.addEventListener('change', (e) => {
+        currentChallenge = e.target.value;
+        loadData();
+    });
+}
+
 // 页面加载完成后获取数据
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded', () => {
+    initSelectors();
+    loadData();
+});
