@@ -1,26 +1,17 @@
 // API配置
 const API_URL = 'https://api.huaxu.app/servers/cn/warzone/current/16';
 
-// 元素类型映射
-const ELEMENT_MAP = {
-    'physical': 'physical',
-    'fire': 'fire',
-    'thunder': 'thunder',
-    'ice': 'physical'  // 默认使用physical样式
-};
+// 根据增益描述判断元素类型
+function getElementClassFromBuffs(zone) {
+    // 检查增益描述中的关键词
+    const buffDesc = zone.buffDescription || '';
+    const buffNames = zone.buffs ? zone.buffs.map(b => b.name + b.description).join('') : '';
+    const allText = buffDesc + buffNames + (zone.description || '');
 
-// 根据战区名称获取元素类型CSS类
-function getElementClassByName(zoneName) {
-    if (zoneName.includes('火焰') || zoneName.includes('火')) return 'fire';
-    if (zoneName.includes('机械') || zoneName.includes('物理')) return 'physical';
-    if (zoneName.includes('镭射') || zoneName.includes('蚀刃') || zoneName.includes('熵钟')) return 'thunder';
+    if (allText.includes('火') || allText.includes('焚烧')) return 'fire';
+    if (allText.includes('雷') || allText.includes('电束') || allText.includes('熠光')) return 'thunder';
+    if (allText.includes('物理') || allText.includes('真意斩')) return 'physical';
     return 'physical';
-}
-
-// 获取元素类型对应的CSS类（优先从名称判断）
-function getElementClass(element, zoneName) {
-    if (zoneName) return getElementClassByName(zoneName);
-    return ELEMENT_MAP[element] || 'physical';
 }
 
 // 格式化数字
@@ -42,7 +33,7 @@ function formatTime(timeStr) {
 
 // 创建战区卡片HTML
 function createZoneCard(zone) {
-    const elementClass = getElementClass(zone.element, zone.name);
+    const elementClass = getElementClassFromBuffs(zone);
 
     let buffsHtml = '';
     if (zone.buffs && zone.buffs.length > 0) {
@@ -143,7 +134,7 @@ function renderRankings(rankings, zones) {
             <div class="col-player">玩家</div>
     `;
     zones.forEach(zone => {
-        const zoneClass = getElementClassByName(zone.name);
+        const zoneClass = getElementClassFromBuffs(zone);
         headerHtml += `<div class="col-zone-score ${zoneClass}">${zone.name}</div>`;
     });
     headerHtml += `
@@ -169,7 +160,7 @@ function renderRankings(rankings, zones) {
         zones.forEach(zone => {
             const zoneData = ranking.zones ? ranking.zones.find(z => z.id === zone.id) : null;
             const score = zoneData ? formatNumber(zoneData.score) : '--';
-            const zoneClass = getElementClassByName(zone.name);
+            const zoneClass = getElementClassFromBuffs(zone);
             html += `<div class="zone-score ${zoneClass}">${score}</div>`;
         });
 
