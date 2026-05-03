@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
-    color: #fff;
+    background: #0a0a0a;
+    color: #e0e0e0;
     min-height: 100vh;
     padding: 20px;
 }
@@ -25,7 +25,7 @@ body {
 }
 
 .header h1 {
-    color: #00d4ff;
+    color: #ffffff;
     font-size: 32px;
     margin-bottom: 10px;
 }
@@ -48,48 +48,31 @@ body {
 /* 普通战区卡片 */
 .zone-card {
     flex: 1;
-    background: rgba(0, 0, 0, 0.3);
+    background: #1a1a1a;
     padding: 20px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.zone-card.fire {
-    background: rgba(255, 107, 0, 0.15);
-    border-color: rgba(255, 107, 0, 0.3);
-}
-
-.zone-card.physical {
-    background: rgba(0, 150, 255, 0.15);
-    border-color: rgba(0, 150, 255, 0.3);
-}
-
-.zone-card.thunder {
-    background: rgba(150, 0, 255, 0.15);
-    border-color: rgba(150, 0, 255, 0.3);
+    border: 1px solid #333;
 }
 
 .zone-name {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 12px;
+    color: #fff;
 }
 
-.zone-card.fire .zone-name { color: #ff6b00; }
-.zone-card.physical .zone-name { color: #0096ff; }
-.zone-card.thunder .zone-name { color: #9600ff; }
-
 .zone-desc {
-    color: #888;
+    color: #999;
     font-size: 13px;
     margin-bottom: 15px;
 }
 
 .zone-info {
-    background: rgba(0, 0, 0, 0.2);
+    background: #111;
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 10px;
+    border: 1px solid #222;
 }
 
 .zone-info:last-child {
@@ -100,14 +83,11 @@ body {
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 6px;
+    color: #ccc;
 }
 
-.zone-card.fire .info-label { color: #ff6b00; }
-.zone-card.physical .info-label { color: #0096ff; }
-.zone-card.thunder .info-label { color: #9600ff; }
-
 .info-desc {
-    color: #ccc;
+    color: #aaa;
     font-size: 11px;
     line-height: 1.5;
 }
@@ -115,25 +95,25 @@ body {
 /* 混合区 */
 .mixed-zone {
     flex: 2;
-    border: 2px solid rgba(150, 0, 255, 0.5);
+    border: 2px solid #444;
     border-radius: 12px;
     padding: 18px;
-    background: rgba(150, 0, 255, 0.05);
+    background: #151515;
 }
 
 .mixed-zone-header {
-    color: #9600ff;
+    color: #fff;
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(150, 0, 255, 0.3);
+    border-bottom: 1px solid #333;
 }
 
 .mixed-zone-header .tag {
     font-size: 12px;
-    color: #ff6b00;
+    color: #888;
     margin-left: 8px;
 }
 
@@ -144,27 +124,27 @@ body {
 
 .mixed-zone-card {
     flex: 1;
-    background: rgba(150, 0, 255, 0.15);
+    background: #1a1a1a;
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid rgba(150, 0, 255, 0.3);
+    border: 1px solid #333;
 }
 
 .mixed-zone-card .zone-name {
     font-size: 16px;
-    color: #9600ff;
+    color: #fff;
 }
 
 /* 分隔线 */
 .divider {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    height: 1px;
+    background: #333;
     margin: 30px 0;
 }
 
 /* 排行榜 */
 .rankings h2 {
-    color: #00d4ff;
+    color: #fff;
     font-size: 22px;
     margin-bottom: 20px;
 }
@@ -176,39 +156,37 @@ body {
 }
 
 .ranking-table {
-    background: rgba(0, 0, 0, 0.3);
+    background: #1a1a1a;
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid #333;
 }
 
 .ranking-header {
     display: flex;
     padding: 15px 20px;
-    background: rgba(0, 212, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #222;
+    border-bottom: 1px solid #333;
     font-size: 13px;
     font-weight: bold;
 }
 
-.ranking-header .col-rank { width: 60px; color: #00d4ff; }
-.ranking-header .col-player { flex: 1; color: #00d4ff; }
-.ranking-header .col-zone-score { width: 120px; color: #00d4ff; text-align: right; }
-.ranking-header .col-zone-score.fire { color: #ff6b00; }
-.ranking-header .col-zone-score.physical { color: #0096ff; }
-.ranking-header .col-zone-score.thunder { color: #9600ff; }
-.ranking-header .col-total { width: 120px; color: #00d4ff; text-align: right; font-weight: bold; }
+.ranking-header .col-rank { width: 60px; color: #999; }
+.ranking-header .col-player { flex: 1; color: #999; }
+.ranking-header .col-zone-score { width: 120px; color: #999; text-align: right; }
+.ranking-header .col-total { width: 120px; color: #fff; text-align: right; }
 
 .ranking-row {
     display: flex;
     padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #222;
     align-items: center;
     font-size: 14px;
     transition: background 0.2s;
 }
 
 .ranking-row:hover {
-    background: rgba(0, 212, 255, 0.05);
+    background: #222;
 }
 
 .ranking-row:last-child {
@@ -218,12 +196,12 @@ body {
 .rank-num {
     width: 60px;
     font-weight: bold;
-    color: #888;
+    color: #666;
 }
 
-.rank-num.top-1 { color: #ffd700; }
-.rank-num.top-2 { color: #c0c0c0; }
-.rank-num.top-3 { color: #cd7f32; }
+.rank-num.top-1 { color: #fff; }
+.rank-num.top-2 { color: #ddd; }
+.rank-num.top-3 { color: #bbb; }
 
 .player-info {
     flex: 1;
@@ -244,15 +222,12 @@ body {
     width: 120px;
     text-align: right;
     font-size: 13px;
+    color: #ccc;
 }
-
-.zone-score.fire { color: #ff6b00; }
-.zone-score.physical { color: #0096ff; }
-.zone-score.thunder { color: #9600ff; }
 
 .total-score {
     width: 120px;
-    color: #00d4ff;
+    color: #fff;
     font-weight: bold;
     text-align: right;
 }

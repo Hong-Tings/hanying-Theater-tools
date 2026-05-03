@@ -1,19 +1,6 @@
 // API配置
 const API_URL = 'https://api.huaxu.app/servers/cn/warzone/current/16';
 
-// 根据增益描述判断元素类型
-function getElementClassFromBuffs(zone) {
-    // 检查增益描述中的关键词
-    const buffDesc = zone.buffDescription || '';
-    const buffNames = zone.buffs ? zone.buffs.map(b => b.name + b.description).join('') : '';
-    const allText = buffDesc + buffNames + (zone.description || '');
-
-    if (allText.includes('火') || allText.includes('焚烧')) return 'fire';
-    if (allText.includes('雷') || allText.includes('电束') || allText.includes('熠光')) return 'thunder';
-    if (allText.includes('物理') || allText.includes('真意斩')) return 'physical';
-    return 'physical';
-}
-
 // 格式化数字
 function formatNumber(num) {
     return num.toLocaleString('zh-CN');
@@ -33,8 +20,6 @@ function formatTime(timeStr) {
 
 // 创建战区卡片HTML
 function createZoneCard(zone) {
-    const elementClass = getElementClassFromBuffs(zone);
-
     let buffsHtml = '';
     if (zone.buffs && zone.buffs.length > 0) {
         buffsHtml = zone.buffs.map(buff => `
@@ -56,7 +41,7 @@ function createZoneCard(zone) {
     }
 
     return `
-        <div class="zone-card ${elementClass}">
+        <div class="zone-card">
             <div class="zone-name">${zone.name}</div>
             <div class="zone-desc">${zone.description}</div>
             ${weathersHtml}
@@ -134,8 +119,7 @@ function renderRankings(rankings, zones) {
             <div class="col-player">玩家</div>
     `;
     zones.forEach(zone => {
-        const zoneClass = getElementClassFromBuffs(zone);
-        headerHtml += `<div class="col-zone-score ${zoneClass}">${zone.name}</div>`;
+        headerHtml += `<div class="col-zone-score">${zone.name}</div>`;
     });
     headerHtml += `
             <div class="col-total">总分</div>
@@ -160,8 +144,7 @@ function renderRankings(rankings, zones) {
         zones.forEach(zone => {
             const zoneData = ranking.zones ? ranking.zones.find(z => z.id === zone.id) : null;
             const score = zoneData ? formatNumber(zoneData.score) : '--';
-            const zoneClass = getElementClassFromBuffs(zone);
-            html += `<div class="zone-score ${zoneClass}">${score}</div>`;
+            html += `<div class="zone-score">${score}</div>`;
         });
 
         html += `
