@@ -80,7 +80,9 @@ function renderZones(zones) {
             // 为每个增益创建独立的子卡片
             let subCardsHtml = '';
             zone.buffs.forEach((buff, index) => {
-                const weather = zone.weathers && zone.weathers[index] ? zone.weathers[index] : zone.weathers[0];
+                // 交换天气索引：第一个buff对应第二个weather，第二个buff对应第一个weather
+                const weatherIndex = zone.weathers && zone.weathers.length >= 2 ? 1 - index : 0;
+                const weather = zone.weathers && zone.weathers[weatherIndex] ? zone.weathers[weatherIndex] : zone.weathers[0];
                 subCardsHtml += createMixedSubCard(zone, buff, weather);
             });
 
