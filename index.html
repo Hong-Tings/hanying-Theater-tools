@@ -11,6 +11,32 @@
         <!-- 页面标题 -->
         <header class="header">
             <h1>战区数据</h1>
+            <div class="controls">
+                <select id="difficultySelect">
+                    <option value="16">传说 (80-120)</option>
+                    <option value="15">Hero (80-120)</option>
+                    <option value="14">Leader (80-120)</option>
+                    <option value="13">Leader (55-79)</option>
+                    <option value="12">Elite (80-120)</option>
+                    <option value="11">Elite (55-79)</option>
+                    <option value="10">Elite (1-54)</option>
+                    <option value="9">Vanguard (80-120)</option>
+                    <option value="8">Vanguard (55-79)</option>
+                    <option value="7">Vanguard (1-54)</option>
+                    <option value="6">Recon (80-120)</option>
+                    <option value="5">Recon (55-79)</option>
+                    <option value="4">Recon (1-54)</option>
+                    <option value="3">Backup (80-120)</option>
+                    <option value="2">Backup (55-79)</option>
+                    <option value="1">Backup (1-54)</option>
+                </select>
+                <div class="week-nav">
+                    <button id="prevWeek">◀</button>
+                    <span id="weekDisplay">第568周</span>
+                    <button id="nextWeek">▶</button>
+                </div>
+            </div>
+            <div class="date-range" id="dateRange">2026年04月21日 - 2026年04月27日</div>
             <div class="meta">
                 <span id="members">参与人数: --</span>
                 <span id="updatedAt">更新时间: --</span>

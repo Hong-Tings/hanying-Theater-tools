@@ -1,5 +1,34 @@
 // API配置
-const API_URL = 'https://api.huaxu.app/servers/cn/warzone/current/16';
+const API_BASE = 'https://api.huaxu.app/servers/cn/warzone';
+let currentWeek = 568;
+let currentDifficulty = '16';
+
+// 计算日期范围（战区每周一刷新）
+function getWeekDateRange(week) {
+    // 基准日期：第1周的开始日期（需要根据实际情况调整）
+    // 这里假设第1周从某个固定日期开始
+    // 由于不知道确切的起始周，我们用当前周数反推
+    const now = new Date();
+    const currentWeekStart = new Date(now);
+    // 调整到本周一
+    const dayOfWeek = currentWeekStart.getDay();
+    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    currentWeekStart.setDate(currentWeekStart.getDate() - diff);
+
+    // 计算目标周的开始日期
+    const weekDiff = 568 - week;
+    const targetStart = new Date(currentWeekStart);
+    targetStart.setDate(targetStart.getDate() - (weekDiff * 7));
+
+    const targetEnd = new Date(targetStart);
+    targetEnd.setDate(targetEnd.getDate() + 6);
+
+    const formatDate = (date) => {
+        return `${date.getFullYear()}年${String(date.getMonth() + 1).padStart(2, '0')}月${String(date.getDate()).padStart(2, '0')}日`;
+    };
+
+    return `${formatDate(targetStart)} - ${formatDate(targetEnd)}`;
+}
 
 // 格式化数字
 function formatNumber(num) {
@@ -159,12 +188,15 @@ let zonesData = [];
 function updateHeader(data) {
     document.getElementById('members').textContent = `参与人数: ${formatNumber(data.members)}`;
     document.getElementById('updatedAt').textContent = `更新时间: ${formatTime(data.updatedAt)}`;
+    document.getElementById('weekDisplay').textContent = `第${data.activity}周`;
+    document.getElementById('dateRange').textContent = getWeekDateRange(data.activity);
 }
 
 // 加载数据
 async function loadData() {
     try {
-        const response = await fetch(API_URL);
+        const url = `${API_BASE}/${currentWeek}/${currentDifficulty}`;
+        const response = await fetch(url);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.warzone) {
@@ -192,5 +224,34 @@ async function loadData() {
     }
 }
 
+// 初始化选择器
+function initSelectors() {
+    const difficultySelect = document.getElementById('difficultySelect');
+    const prevWeekBtn = document.getElementById('prevWeek');
+    const nextWeekBtn = document.getElementById('nextWeek');
+
+    difficultySelect.value = currentDifficulty;
+
+    difficultySelect.addEventListener('change', (e) => {
+        currentDifficulty = e.target.value;
+        loadData();
+    });
+
+    prevWeekBtn.addEventListener('click', () => {
+        currentWeek--;
+        loadData();
+    });
+
+    nextWeekBtn.addEventListener('click', () => {
+        if (currentWeek < 568) {
+            currentWeek++;
+            loadData();
+        }
+    });
+}
+
 // 页面加载完成后获取数据
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded', () => {
+    initSelectors();
+    loadData();
+});
