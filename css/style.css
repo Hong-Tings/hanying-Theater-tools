@@ -18,6 +18,45 @@ body {
     margin: 0 auto;
 }
 
+/* 导航栏 */
+.nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.nav-btn {
+    background: #222;
+    color: #888;
+    border: 1px solid #444;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+.nav-btn.active {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+/* 页面切换 */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
 /* 页面标题 */
 .header {
     text-align: center;
@@ -291,6 +330,206 @@ body {
     text-align: right;
 }
 
+/* 玩家查询页面 */
+.search-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    width: 300px;
+}
+
+.search-box input::placeholder {
+    color: #666;
+}
+
+.search-box button {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-box button:hover {
+    background: #ddd;
+}
+
+/* 玩家信息 */
+.player-info-container {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.player-profile {
+    display: flex;
+    gap: 30px;
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #333;
+    margin-bottom: 30px;
+}
+
+.player-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.player-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.player-avatar .frame {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.player-details {
+    flex: 1;
+}
+
+.player-details h2 {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.player-meta {
+    display: flex;
+    gap: 20px;
+    color: #888;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.player-meta span:first-child {
+    color: #fff;
+    font-weight: bold;
+}
+
+.player-guild,
+.player-likes {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+/* 角色列表 */
+.characters-section {
+    background: #1a1a1a;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid #333;
+}
+
+.characters-section h3 {
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.characters-section h3 span {
+    font-size: 14px;
+    color: #888;
+    font-weight: normal;
+}
+
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.character-card {
+    display: flex;
+    gap: 14px;
+    background: #222;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    transition: all 0.2s;
+}
+
+.character-card:hover {
+    border-color: #555;
+    background: #2a2a2a;
+}
+
+.character-icon {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+.character-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.character-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.character-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.character-frame {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.character-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.character-stats span {
+    background: #333;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: #ccc;
+}
+
 /* 响应式 */
 @media (max-width: 900px) {
     .zones-container {
@@ -320,5 +559,23 @@ body {
     .ranking-header .col-total,
     .total-score {
         width: 100px;
+    }
+
+    .player-profile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .player-meta {
+        justify-content: center;
+    }
+
+    .search-box input {
+        width: 200px;
+    }
+
+    .characters-grid {
+        grid-template-columns: 1fr;
     }
 }

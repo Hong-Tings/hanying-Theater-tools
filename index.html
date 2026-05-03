@@ -8,56 +8,106 @@
 </head>
 <body>
     <div class="container">
-        <!-- 页面标题 -->
-        <header class="header">
-            <h1>战区数据</h1>
-            <div class="controls">
-                <select id="difficultySelect">
-                    <option value="16">传说 (80-120)</option>
-                    <option value="15">Hero (80-120)</option>
-                    <option value="14">Leader (80-120)</option>
-                    <option value="13">Leader (55-79)</option>
-                    <option value="12">Elite (80-120)</option>
-                    <option value="11">Elite (55-79)</option>
-                    <option value="10">Elite (1-54)</option>
-                    <option value="9">Vanguard (80-120)</option>
-                    <option value="8">Vanguard (55-79)</option>
-                    <option value="7">Vanguard (1-54)</option>
-                    <option value="6">Recon (80-120)</option>
-                    <option value="5">Recon (55-79)</option>
-                    <option value="4">Recon (1-54)</option>
-                    <option value="3">Backup (80-120)</option>
-                    <option value="2">Backup (55-79)</option>
-                    <option value="1">Backup (1-54)</option>
-                </select>
-                <div class="week-nav">
-                    <button id="prevWeek">◀</button>
-                    <span id="weekDisplay">第568周</span>
-                    <button id="nextWeek">▶</button>
+        <!-- 导航栏 -->
+        <nav class="nav">
+            <button class="nav-btn active" data-page="warzone">战区数据</button>
+            <button class="nav-btn" data-page="player">玩家查询</button>
+        </nav>
+
+        <!-- 战区数据页面 -->
+        <div id="warzonePage" class="page active">
+            <header class="header">
+                <h1>战区数据</h1>
+                <div class="controls">
+                    <select id="difficultySelect">
+                        <option value="16">传说 (80-120)</option>
+                        <option value="15">Hero (80-120)</option>
+                        <option value="14">Leader (80-120)</option>
+                        <option value="13">Leader (55-79)</option>
+                        <option value="12">Elite (80-120)</option>
+                        <option value="11">Elite (55-79)</option>
+                        <option value="10">Elite (1-54)</option>
+                        <option value="9">Vanguard (80-120)</option>
+                        <option value="8">Vanguard (55-79)</option>
+                        <option value="7">Vanguard (1-54)</option>
+                        <option value="6">Recon (80-120)</option>
+                        <option value="5">Recon (55-79)</option>
+                        <option value="4">Recon (1-54)</option>
+                        <option value="3">Backup (80-120)</option>
+                        <option value="2">Backup (55-79)</option>
+                        <option value="1">Backup (1-54)</option>
+                    </select>
+                    <div class="week-nav">
+                        <button id="prevWeek">◀</button>
+                        <span id="weekDisplay">第568周</span>
+                        <button id="nextWeek">▶</button>
+                    </div>
+                </div>
+                <div class="date-range" id="dateRange">2026年04月21日 - 2026年04月27日</div>
+                <div class="meta">
+                    <span id="members">参与人数: --</span>
+                    <span id="updatedAt">更新时间: --</span>
+                </div>
+            </header>
+
+            <!-- 战区卡片区域 -->
+            <section class="zones-container" id="zonesContainer">
+                <!-- 动态生成 -->
+            </section>
+
+            <!-- 分隔线 -->
+            <div class="divider"></div>
+
+            <!-- 排行榜 -->
+            <section class="rankings">
+                <h2>排行榜 <span class="top-label">TOP 100</span></h2>
+                <div class="ranking-table" id="rankingTable">
+                    <!-- 动态生成 -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 玩家查询页面 -->
+        <div id="playerPage" class="page">
+            <header class="header">
+                <h1>玩家查询</h1>
+                <div class="search-box">
+                    <input type="text" id="playerIdInput" placeholder="输入玩家ID">
+                    <button id="searchBtn">查询</button>
+                </div>
+            </header>
+
+            <div id="playerInfo" class="player-info-container" style="display: none;">
+                <!-- 玩家基本信息 -->
+                <div class="player-profile">
+                    <div class="player-avatar">
+                        <img id="playerPortrait" src="" alt="头像">
+                        <img id="playerFrame" src="" alt="头像框" class="frame">
+                    </div>
+                    <div class="player-details">
+                        <h2 id="playerName">--</h2>
+                        <div class="player-meta">
+                            <span>Lv.<span id="playerLevel">--</span></span>
+                            <span id="playerSign">--</span>
+                        </div>
+                        <div class="player-guild">
+                            公会：<span id="playerGuild">--</span>
+                        </div>
+                        <div class="player-likes">
+                            点赞：<span id="playerLikes">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 角色列表 -->
+                <div class="characters-section">
+                    <h3>角色列表 <span id="charCount">(0)</span></h3>
+                    <div class="characters-grid" id="charactersGrid">
+                        <!-- 动态生成 -->
+                    </div>
                 </div>
             </div>
-            <div class="date-range" id="dateRange">2026年04月21日 - 2026年04月27日</div>
-            <div class="meta">
-                <span id="members">参与人数: --</span>
-                <span id="updatedAt">更新时间: --</span>
-            </div>
-        </header>
-
-        <!-- 战区卡片区域 -->
-        <section class="zones-container" id="zonesContainer">
-            <!-- 动态生成 -->
-        </section>
-
-        <!-- 分隔线 -->
-        <div class="divider"></div>
-
-        <!-- 排行榜 -->
-        <section class="rankings">
-            <h2>排行榜 <span class="top-label">TOP 100</span></h2>
-            <div class="ranking-table" id="rankingTable">
-                <!-- 动态生成 -->
-            </div>
-        </section>
+        </div>
     </div>
 
     <script src="js/main.js"></script>

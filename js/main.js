@@ -1,5 +1,6 @@
 // API配置
-const API_BASE = 'https://api.huaxu.app/servers/cn/warzone';
+const WARZONE_API_BASE = 'https://api.huaxu.app/servers/cn/warzone';
+const PLAYER_API_BASE = 'https://api.huaxu.app/servers/cn/players';
 let currentWeek = 568;
 let currentDifficulty = '16';
 
@@ -192,10 +193,10 @@ function updateHeader(data) {
     document.getElementById('dateRange').textContent = getWeekDateRange(data.activity);
 }
 
-// 加载数据
-async function loadData() {
+// 加载战区数据
+async function loadWarzoneData() {
     try {
-        const url = `${API_BASE}/${currentWeek}/${currentDifficulty}`;
+        const url = `${WARZONE_API_BASE}/${currentWeek}/${currentDifficulty}`;
         const response = await fetch(url);
         const result = await response.json();
 
@@ -224,8 +225,106 @@ async function loadData() {
     }
 }
 
-// 初始化选择器
-function initSelectors() {
+// 加载玩家数据
+async function loadPlayerData(playerId) {
+    try {
+        const url = `${PLAYER_API_BASE}/${playerId}`;
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.status === 'success' && result.data && result.data.player) {
+            const player = result.data.player;
+            const characters = result.data.characters || [];
+
+            // 更新玩家信息
+            updatePlayerInfo(player, characters);
+        } else {
+            console.error('API返回数据格式错误:', result);
+            alert('未找到该玩家');
+        }
+    } catch (error) {
+        console.error('加载玩家数据失败:', error);
+        alert('查询失败，请检查玩家ID');
+    }
+}
+
+// 更新玩家信息
+function updatePlayerInfo(player, characters) {
+    const playerInfo = document.getElementById('playerInfo');
+    playerInfo.style.display = 'block';
+
+    // 基本信息
+    document.getElementById('playerName').textContent = player.name;
+    document.getElementById('playerLevel').textContent = player.level;
+    document.getElementById('playerSign').textContent = player.sign || '暂无签名';
+    document.getElementById('playerGuild').textContent = player.guildName || '暂无公会';
+    document.getElementById('playerLikes').textContent = player.likes || 0;
+
+    // 头像和头像框
+    const portrait = document.getElementById('playerPortrait');
+    const frame = document.getElementById('playerFrame');
+    if (player.portrait) {
+        portrait.src = `https://api.huaxu.app/${player.portrait}`;
+    }
+    if (player.frame) {
+        frame.src = `https://api.huaxu.app/${player.frame}`;
+    }
+
+    // 角色列表
+    const charCount = document.getElementById('charCount');
+    const charactersGrid = document.getElementById('charactersGrid');
+
+    // 只显示已获得的角色
+    const acquiredChars = characters.filter(c => c.acquired);
+    charCount.textContent = `(${acquiredChars.length})`;
+
+    let html = '';
+    acquiredChars.forEach(char => {
+        const iconUrl = char.fashionIcon ? `https://api.huaxu.app/${char.fashionIcon}` : '';
+        const levelText = char.level > 0 ? `Lv.${char.level}` : '';
+        const qualityText = char.quality > 0 ? `★${char.quality}` : '';
+        const frameTypeText = char.frameType === 'omniframe' ? 'S' : 'A';
+
+        html += `
+            <div class="character-card">
+                <div class="character-icon">
+                    <img src="${iconUrl}" alt="${char.characterName}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect fill=%22%23333%22 width=%2264%22 height=%2264%22/></svg>'">
+                </div>
+                <div class="character-info">
+                    <div class="character-name">${char.characterName}</div>
+                    <div class="character-frame">${char.frameName}</div>
+                    <div class="character-stats">
+                        ${levelText ? `<span>${levelText}</span>` : ''}
+                        ${qualityText ? `<span>${qualityText}</span>` : ''}
+                        <span>${frameTypeText}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    charactersGrid.innerHTML = html;
+}
+
+// 初始化导航和选择器
+function initNavigation() {
+    // 页面导航
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const pages = document.querySelectorAll('.page');
+
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetPage = btn.dataset.page;
+
+            navBtns.forEach(b => b.classList.remove('active'));
+            pages.forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            document.getElementById(`${targetPage}Page`).classList.add('active');
+        });
+    });
+
+    // 战区选择器
     const difficultySelect = document.getElementById('difficultySelect');
     const prevWeekBtn = document.getElementById('prevWeek');
     const nextWeekBtn = document.getElementById('nextWeek');
@@ -234,24 +333,44 @@ function initSelectors() {
 
     difficultySelect.addEventListener('change', (e) => {
         currentDifficulty = e.target.value;
-        loadData();
+        loadWarzoneData();
     });
 
     prevWeekBtn.addEventListener('click', () => {
         currentWeek--;
-        loadData();
+        loadWarzoneData();
     });
 
     nextWeekBtn.addEventListener('click', () => {
         if (currentWeek < 568) {
             currentWeek++;
-            loadData();
+            loadWarzoneData();
+        }
+    });
+
+    // 玩家查询
+    const searchBtn = document.getElementById('searchBtn');
+    const playerIdInput = document.getElementById('playerIdInput');
+
+    searchBtn.addEventListener('click', () => {
+        const playerId = playerIdInput.value.trim();
+        if (playerId) {
+            loadPlayerData(playerId);
+        }
+    });
+
+    playerIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const playerId = playerIdInput.value.trim();
+            if (playerId) {
+                loadPlayerData(playerId);
+            }
         }
     });
 }
 
 // 页面加载完成后获取数据
 document.addEventListener('DOMContentLoaded', () => {
-    initSelectors();
-    loadData();
+    initNavigation();
+    loadWarzoneData();
 });

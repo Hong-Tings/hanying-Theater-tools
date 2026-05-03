@@ -15,7 +15,10 @@
       "Bash(curl -s http://localhost:3000/js/main.js)",
       "Bash(pkill -f \"serve -l 3000\")",
       "Bash(curl -s \"https://api.huaxu.app/\")",
-      "Bash(curl -s \"https://api.huaxu.app/servers/cn/warzone/current\")"
+      "Bash(curl -s \"https://api.huaxu.app/servers/cn/warzone/current\")",
+      "Bash(curl -s \"https://api.huaxu.app/servers/cn/warzone/568/16\")",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s \"https://api.huaxu.app/servers/cn/players/34801366\")"
     ]
   }
 }
