@@ -122,7 +122,7 @@ body {
     gap: 12px;
 }
 
-.mixed-zone-card {
+.mixed-sub-card {
     flex: 1;
     background: #1a1a1a;
     padding: 16px;
@@ -130,9 +130,12 @@ body {
     border: 1px solid #333;
 }
 
-.mixed-zone-card .zone-name {
-    font-size: 16px;
-    color: #fff;
+.mixed-sub-header {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #333;
 }
 
 /* 分隔线 */

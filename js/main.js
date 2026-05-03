@@ -50,34 +50,21 @@ function createZoneCard(zone) {
     `;
 }
 
-// 创建混合区卡片HTML
-function createMixedZoneCard(zone) {
-    let buffsHtml = '';
-    if (zone.buffs && zone.buffs.length > 0) {
-        buffsHtml = zone.buffs.map(buff => `
-            <div class="zone-info">
-                <div class="info-label">${buff.name}</div>
-                <div class="info-desc">${buff.description}</div>
-            </div>
-        `).join('');
-    }
-
-    let weathersHtml = '';
-    if (zone.weathers && zone.weathers.length > 0) {
-        weathersHtml = zone.weathers.map(weather => `
+// 创建混合区子卡片HTML
+function createMixedSubCard(zone, buff, weather) {
+    return `
+        <div class="mixed-sub-card">
+            <div class="mixed-sub-header">${zone.name}</div>
+            <div class="zone-name">${buff.name}</div>
+            <div class="zone-desc">${zone.description}</div>
             <div class="zone-info">
                 <div class="info-label">天气：${weather.name}</div>
                 <div class="info-desc">${weather.description}</div>
             </div>
-        `).join('');
-    }
-
-    return `
-        <div class="mixed-zone-card">
-            <div class="zone-name">${zone.name}</div>
-            <div class="zone-desc">${zone.description}</div>
-            ${weathersHtml}
-            ${buffsHtml}
+            <div class="zone-info">
+                <div class="info-label">增益：${buff.name}</div>
+                <div class="info-desc">${buff.description}</div>
+            </div>
         </div>
     `;
 }
@@ -90,13 +77,20 @@ function renderZones(zones) {
     zones.forEach(zone => {
         // 判断是否为混合区（包含多个增益）
         if (zone.buffs && zone.buffs.length >= 2) {
+            // 为每个增益创建独立的子卡片
+            let subCardsHtml = '';
+            zone.buffs.forEach((buff, index) => {
+                const weather = zone.weathers && zone.weathers[index] ? zone.weathers[index] : zone.weathers[0];
+                subCardsHtml += createMixedSubCard(zone, buff, weather);
+            });
+
             html += `
                 <div class="mixed-zone">
                     <div class="mixed-zone-header">
                         ${zone.name} <span class="tag">混合区</span>
                     </div>
                     <div class="mixed-zone-content">
-                        ${createMixedZoneCard(zone)}
+                        ${subCardsHtml}
                     </div>
                 </div>
             `;
