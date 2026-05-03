@@ -1,8 +1,15 @@
 // API配置
 const WARZONE_API_BASE = 'https://api.huaxu.app/servers/cn/warzone';
 const PLAYER_API_BASE = 'https://api.huaxu.app/servers/cn/players';
+const ASSETS_BASE = 'https://assets.huaxu.app/cn';
 let currentWeek = 568;
 let currentDifficulty = '16';
+
+// 获取图片URL
+function getImageUrl(path) {
+    if (!path) return '';
+    return `${ASSETS_BASE}/${path}.256.webp`;
+}
 
 // 模拟浏览器请求头
 const REQUEST_HEADERS = {
@@ -287,10 +294,10 @@ function updatePlayerInfo(player, characters) {
     const portrait = document.getElementById('playerPortrait');
     const frame = document.getElementById('playerFrame');
     if (player.portrait) {
-        portrait.src = `https://api.huaxu.app/${player.portrait}`;
+        portrait.src = getImageUrl(player.portrait);
     }
     if (player.frame) {
-        frame.src = `https://api.huaxu.app/${player.frame}`;
+        frame.src = getImageUrl(player.frame);
     }
 
     // 角色列表
@@ -303,7 +310,7 @@ function updatePlayerInfo(player, characters) {
 
     let html = '';
     acquiredChars.forEach(char => {
-        const iconUrl = char.fashionIcon ? `https://api.huaxu.app/${char.fashionIcon}` : '';
+        const iconUrl = char.fashionIcon ? getImageUrl(char.fashionIcon) : '';
         const levelText = char.level > 0 ? `Lv.${char.level}` : '';
         const qualityText = char.quality > 0 ? `★${char.quality}` : '';
         const frameTypeText = char.frameType === 'omniframe' ? 'S' : 'A';
