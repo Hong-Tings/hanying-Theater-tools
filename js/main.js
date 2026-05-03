@@ -1,6 +1,5 @@
 // API配置
-const API_BASE = 'https://api.huaxu.app/servers';
-let currentServer = 'cn';
+const API_BASE = 'https://api.huaxu.app/servers/cn/warzone/current';
 let currentChallenge = '16';
 
 // 格式化数字
@@ -157,7 +156,6 @@ let zonesData = [];
 
 // 更新页面标题信息
 function updateHeader(data) {
-    document.getElementById('server').textContent = `服务器: ${data.server.toUpperCase()}`;
     document.getElementById('members').textContent = `参与人数: ${formatNumber(data.members)}`;
     document.getElementById('updatedAt').textContent = `更新时间: ${formatTime(data.updatedAt)}`;
 }
@@ -165,7 +163,7 @@ function updateHeader(data) {
 // 加载数据
 async function loadData() {
     try {
-        const url = `${API_BASE}/${currentServer}/warzone/current/${currentChallenge}`;
+        const url = `${API_BASE}/${currentChallenge}`;
         const response = await fetch(url);
         const result = await response.json();
 
@@ -196,16 +194,9 @@ async function loadData() {
 
 // 初始化选择器
 function initSelectors() {
-    const serverSelect = document.getElementById('serverSelect');
     const challengeSelect = document.getElementById('challengeSelect');
 
-    serverSelect.value = currentServer;
     challengeSelect.value = currentChallenge;
-
-    serverSelect.addEventListener('change', (e) => {
-        currentServer = e.target.value;
-        loadData();
-    });
 
     challengeSelect.addEventListener('change', (e) => {
         currentChallenge = e.target.value;
