@@ -1,15 +1,6 @@
-// API配置
-const WARZONE_API_BASE = 'https://api.huaxu.app/servers/cn/warzone';
-const PLAYER_API_BASE = 'https://api.huaxu.app/servers/cn/players';
-const ASSETS_BASE = 'https://assets.huaxu.app/cn-beta';
+// 使用config.js中定义的配置
 let currentWeek = 568;
 let currentDifficulty = '16';
-
-// 获取图片URL
-function getImageUrl(path) {
-    if (!path) return '';
-    return `${ASSETS_BASE}/${path}.png`;
-}
 
 // 模拟浏览器请求头
 const REQUEST_HEADERS = {
@@ -226,7 +217,7 @@ function updateHeader(data) {
 // 加载战区数据
 async function loadWarzoneData() {
     try {
-        const url = `${WARZONE_API_BASE}/${currentWeek}/${currentDifficulty}`;
+        const url = `${API_CONFIG.warzone}/${currentWeek}/${currentDifficulty}`;
         const response = await fetchWithHeaders(url);
         const result = await response.json();
 
@@ -258,7 +249,7 @@ async function loadWarzoneData() {
 // 加载玩家数据
 async function loadPlayerData(playerId) {
     try {
-        const url = `${PLAYER_API_BASE}/${playerId}`;
+        const url = `${API_CONFIG.player}/${playerId}`;
         const response = await fetchWithHeaders(url);
         const result = await response.json();
 

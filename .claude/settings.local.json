@@ -24,7 +24,11 @@
       "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/\")",
       "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/image/\")",
       "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/image/rolecharacter/\")",
-      "Bash(curl -s -I \"https://assets.huaxu.app/cn-beta/image/rolecharacter/roleheadr2bangbinata1.png\")"
+      "Bash(curl -s -I \"https://assets.huaxu.app/cn-beta/image/rolecharacter/roleheadr2bangbinata1.png\")",
+      "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/audio/\")",
+      "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/video/\")",
+      "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/assets/\")",
+      "Bash(curl -s \"https://assets.huaxu.app/browse/cn-beta/atlas/\")"
     ]
   }
 }
