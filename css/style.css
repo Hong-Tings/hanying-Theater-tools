@@ -338,6 +338,95 @@ body {
     margin-bottom: 20px;
 }
 
+/* 历史查询 */
+.history-section {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    margin-bottom: 24px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.history-header h3 {
+    font-size: 16px;
+    color: #fff;
+}
+
+.clear-btn {
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    color: #fff;
+    border-color: #666;
+}
+
+.history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #222;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.history-item:hover {
+    border-color: #555;
+    background: #2a2a2a;
+}
+
+.history-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.history-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-name {
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.history-id {
+    font-size: 11px;
+    color: #888;
+}
+
+.history-empty {
+    color: #666;
+    font-size: 13px;
+    text-align: center;
+    padding: 10px;
+}
+
 .search-box input {
     background: #222;
     color: #fff;

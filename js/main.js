@@ -1,6 +1,8 @@
 // 使用config.js中定义的配置
 let currentWeek = 568;
 let currentDifficulty = '16';
+const HISTORY_KEY = 'player_search_history';
+const MAX_HISTORY = 20;
 
 // 模拟浏览器请求头
 const REQUEST_HEADERS = {
@@ -269,6 +271,76 @@ async function loadPlayerData(playerId) {
     }
 }
 
+// 历史查询功能
+function getSearchHistory() {
+    const history = localStorage.getItem(HISTORY_KEY);
+    return history ? JSON.parse(history) : [];
+}
+
+function saveToHistory(playerId, playerName, portrait) {
+    let history = getSearchHistory();
+
+    // 移除重复记录
+    history = history.filter(item => item.id !== playerId);
+
+    // 添加到开头
+    history.unshift({
+        id: playerId,
+        name: playerName,
+        portrait: portrait,
+        timestamp: Date.now()
+    });
+
+    // 限制历史记录数量
+    if (history.length > MAX_HISTORY) {
+        history = history.slice(0, MAX_HISTORY);
+    }
+
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    renderHistory();
+}
+
+function clearHistory() {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+}
+
+function renderHistory() {
+    const historyList = document.getElementById('historyList');
+    const history = getSearchHistory();
+
+    if (history.length === 0) {
+        historyList.innerHTML = '<div class="history-empty">暂无查询记录</div>';
+        return;
+    }
+
+    let html = '';
+    history.forEach(item => {
+        const portraitUrl = item.portrait ? getImageUrl(item.portrait) : '';
+        html += `
+            <div class="history-item" data-id="${item.id}">
+                <img class="history-avatar" src="${portraitUrl}" alt="${item.name}"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect fill=%22%23333%22 width=%2236%22 height=%2236%22/></svg>'">
+                <div class="history-info">
+                    <div class="history-name">${item.name}</div>
+                    <div class="history-id">ID: ${item.id}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    historyList.innerHTML = html;
+
+    // 添加点击事件
+    document.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const playerId = item.dataset.id;
+            document.getElementById('playerIdInput').value = playerId;
+            loadPlayerData(playerId);
+        });
+    });
+}
+
 // 更新玩家信息
 function updatePlayerInfo(player, characters) {
     const playerInfo = document.getElementById('playerInfo');
@@ -290,6 +362,9 @@ function updatePlayerInfo(player, characters) {
     if (player.frame) {
         frame.src = getImageUrl(player.frame);
     }
+
+    // 保存到历史
+    saveToHistory(player.id, player.name, player.portrait);
 
     // 角色列表
     const charCount = document.getElementById('charCount');
@@ -388,6 +463,17 @@ function initNavigation() {
             }
         }
     });
+
+    // 清除历史
+    const clearHistoryBtn = document.getElementById('clearHistory');
+    clearHistoryBtn.addEventListener('click', () => {
+        if (confirm('确定要清空查询历史吗？')) {
+            clearHistory();
+        }
+    });
+
+    // 渲染历史列表
+    renderHistory();
 }
 
 // 页面加载完成后获取数据
