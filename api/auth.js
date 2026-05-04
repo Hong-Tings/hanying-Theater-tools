@@ -5,14 +5,14 @@
 const { createClient } = require('@supabase/supabase-js');
 const crypto = require('crypto');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+const supabaseUrl = (process.env.SUPABASE_URL || '').trim();
+const supabaseKey = (process.env.SUPABASE_SERVICE_KEY || '').replace(/[\r\n\s]/g, '');
 
 if (!supabaseUrl || !supabaseKey) {
     console.error('Missing env vars: SUPABASE_URL=' + !!supabaseUrl + ' SUPABASE_SERVICE_KEY=' + !!supabaseKey);
 }
 
-const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // scrypt 密码哈希（加盐）
 function hashPassword(password) {

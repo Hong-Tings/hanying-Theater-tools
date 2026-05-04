@@ -5,10 +5,9 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
+const supabaseUrl = (process.env.SUPABASE_URL || '').trim();
+const supabaseKey = (process.env.SUPABASE_SERVICE_KEY || '').replace(/[\r\n\s]/g, '');
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const ALLOWED_KEYS = ['bind', 'history', 'follows', 'wz_scores', 'ppc_scores'];
 
