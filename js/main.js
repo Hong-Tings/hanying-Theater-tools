@@ -1245,7 +1245,7 @@ function renderWzEvaluation(total) {
     `;
 }
 
-function saveWzScore() {
+async function saveWzScore() {
     if (!currentWarzoneInfo) return;
     if (myWzWeek !== maxWeek) return; // 只能保存本周
 
@@ -1277,10 +1277,13 @@ function saveWzScore() {
     saveScores(WZ_SCORE_KEY, allScores);
     renderWzHistory();
     renderWzEvaluation(total);
-    AUTH.syncToCloud('wz_scores', allScores);
+    const ok = await AUTH.syncToCloud('wz_scores', allScores);
+    if (AUTH.isLoggedIn() && !ok) {
+        alert('分数已保存到本地，但云端同步失败，请检查网络');
+    }
 }
 
-function savePpcScore() {
+async function savePpcScore() {
     if (!currentPpcInfo) return;
     if (myPpcWeek !== maxPpcWeek) return; // 只能保存本周
 
@@ -1305,7 +1308,10 @@ function savePpcScore() {
     if (allScores.length > 20) allScores = allScores.slice(0, 20);
     saveScores(PPC_SCORE_KEY, allScores);
     renderPpcHistory();
-    AUTH.syncToCloud('ppc_scores', allScores);
+    const ok = await AUTH.syncToCloud('ppc_scores', allScores);
+    if (AUTH.isLoggedIn() && !ok) {
+        alert('分数已保存到本地，但云端同步失败，请检查网络');
+    }
 }
 
 function renderWzHistory() {
@@ -1776,13 +1782,13 @@ function initNavigation() {
         }
     });
 
-    document.getElementById('saveWzBtn').addEventListener('click', () => {
-        saveWzScore();
+    document.getElementById('saveWzBtn').addEventListener('click', async () => {
+        await saveWzScore();
         alert('战区分数已保存');
     });
 
-    document.getElementById('savePpcBtn').addEventListener('click', () => {
-        savePpcScore();
+    document.getElementById('savePpcBtn').addEventListener('click', async () => {
+        await savePpcScore();
         alert('幻痛分数已保存');
     });
 

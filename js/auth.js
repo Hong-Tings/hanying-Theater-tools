@@ -18,13 +18,15 @@ const AUTH = {
         this.playerName = localStorage.getItem(AUTH_PLAYER_NAME_KEY);
 
         if (this.token) {
-            // 验证 token 是否仍然有效（静默验证，失败不影响使用）
+            // 验证 token 是否仍然有效，并拉取最新云端数据
             try {
                 const resp = await fetch(USER_DATA_API, {
                     headers: { 'Authorization': `Bearer ${this.token}` }
                 });
                 if (resp.status === 401) {
                     this._clearLocal();
+                } else if (resp.ok) {
+                    await this._pullFromCloud();
                 }
             } catch {
                 // 网络错误不清除 token，可能是暂时断网
@@ -61,8 +63,9 @@ const AUTH = {
         localStorage.setItem(AUTH_PLAYER_ID_KEY, this.playerId);
         localStorage.setItem(AUTH_PLAYER_NAME_KEY, this.playerName);
 
-        // 登录后从云端拉取数据同步到本地
+        // 登录后：先拉取云端数据覆盖本地，再把本地合并数据推回云端
         await this._pullFromCloud();
+        await this._pushToCloud();
 
         this._updateUI();
         return result.data;
@@ -185,7 +188,7 @@ const AUTH = {
                 if (!raw) continue;
 
                 const data = JSON.parse(raw);
-                await fetch(USER_DATA_API, {
+                const resp = await fetch(USER_DATA_API, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -193,6 +196,9 @@ const AUTH = {
                     },
                     body: JSON.stringify({ key, data })
                 });
+                if (!resp.ok) {
+                    console.error(`推送 ${key} 失败: HTTP ${resp.status}`);
+                }
             } catch (error) {
                 console.error(`推送 ${key} 到云端失败:`, error);
             }
@@ -201,10 +207,10 @@ const AUTH = {
 
     // 同步单条数据到云端（保存时调用）
     async syncToCloud(key, data) {
-        if (!this.token) return;
+        if (!this.token) return false;
 
         try {
-            await fetch(USER_DATA_API, {
+            const resp = await fetch(USER_DATA_API, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -212,17 +218,23 @@ const AUTH = {
                 },
                 body: JSON.stringify({ key, data })
             });
+            if (!resp.ok) {
+                console.error(`同步 ${key} 失败: HTTP ${resp.status}`);
+                return false;
+            }
+            return true;
         } catch (error) {
             console.error(`同步 ${key} 到云端失败:`, error);
+            return false;
         }
     },
 
     // 从云端删除单条数据
     async deleteFromCloud(key) {
-        if (!this.token) return;
+        if (!this.token) return false;
 
         try {
-            await fetch(USER_DATA_API, {
+            const resp = await fetch(USER_DATA_API, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -230,8 +242,10 @@ const AUTH = {
                 },
                 body: JSON.stringify({ key })
             });
+            return resp.ok;
         } catch (error) {
             console.error(`删除云端 ${key} 失败:`, error);
+            return false;
         }
     },
 

@@ -2159,6 +2159,79 @@ body {
     }
 }
 
+/* 小屏手机：排行榜卡片布局 */
+@media (max-width: 600px) {
+    .ranking-table {
+        overflow-x: auto;
+    }
+
+    .ranking-header {
+        display: none;
+    }
+
+    .ranking-row {
+        flex-wrap: wrap;
+        padding: 12px 14px;
+        gap: 6px 0;
+        align-items: flex-start;
+    }
+
+    .rank-num {
+        width: 30px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 2px;
+    }
+
+    .player-info {
+        width: calc(100% - 40px);
+        gap: 6px;
+    }
+
+    .player-name {
+        font-size: 14px;
+    }
+
+    .player-sign {
+        display: none;
+    }
+
+    .col-zone-detail,
+    .zone-detail {
+        width: 33.33%;
+        flex: none;
+        padding: 4px 2px;
+    }
+
+    .zone-score-val {
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+
+    .zone-chars {
+        display: none;
+    }
+
+    .col-total,
+    .total-score {
+        width: 100%;
+        text-align: left;
+        padding-top: 4px;
+        border-top: 0.5px solid rgba(0,0,0,0.06);
+        margin-top: 4px;
+        font-size: 14px;
+    }
+
+    .total-score::before {
+        content: '总分: ';
+        font-weight: 400;
+        color: #86868b;
+        font-size: 12px;
+    }
+}
+
 /* 页脚 */
 .footer {
     text-align: center;
