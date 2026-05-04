@@ -276,6 +276,7 @@ function renderRankings(rankings, zones) {
             }
             html += `
                 <div class="zone-detail">
+                    <div class="zone-name-sm">${zone.name}</div>
                     <div class="zone-score-val">${score}</div>
                     <div class="zone-chars">${charsHtml}</div>
                 </div>
@@ -1840,6 +1841,8 @@ function initNavigation() {
                 loginPwInput.value = '';
                 loginError.textContent = '';
                 renderMinePage();
+                renderWzHistory();
+                renderPpcHistory();
             } catch (error) {
                 loginError.textContent = error.message;
             } finally {

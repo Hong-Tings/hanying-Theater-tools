@@ -628,6 +628,10 @@ body {
     padding: 0 4px;
 }
 
+.zone-name-sm {
+    display: none;
+}
+
 .zone-score-val {
     font-size: 13px;
     color: #1d1d1f;
@@ -2203,6 +2207,16 @@ body {
         width: 33.33%;
         flex: none;
         padding: 4px 2px;
+    }
+
+    .zone-name-sm {
+        display: block;
+        font-size: 10px;
+        color: #86868b;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .zone-score-val {
