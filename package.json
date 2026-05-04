@@ -6,9 +6,10 @@
   "main": "electron-main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux"
+    "build": "echo 'Static site, no build needed'",
+    "electron:win": "electron-builder --win",
+    "electron:mac": "electron-builder --mac",
+    "electron:linux": "electron-builder --linux"
   },
   "build": {
     "appId": "com.huaxu.data",
