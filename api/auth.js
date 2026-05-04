@@ -5,10 +5,14 @@
 const { createClient } = require('@supabase/supabase-js');
 const crypto = require('crypto');
 
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing env vars: SUPABASE_URL=' + !!supabaseUrl + ' SUPABASE_SERVICE_KEY=' + !!supabaseKey);
+}
+
+const supabase = createClient(supabaseUrl || '', supabaseKey || '');
 
 // scrypt 密码哈希（加盐）
 function hashPassword(password) {
@@ -102,8 +106,8 @@ module.exports = async function handler(req, res) {
                 });
 
             if (insertError) {
-                console.error('Insert user error:', insertError);
-                return res.status(500).json({ error: '注册失败，请重试' });
+                console.error('Insert user error:', JSON.stringify(insertError));
+                return res.status(500).json({ error: '注册失败: ' + (insertError.message || '未知错误') });
             }
 
             const token = generateToken();
@@ -155,8 +159,8 @@ module.exports = async function handler(req, res) {
                 });
 
             if (insertError) {
-                console.error('Auto-register error:', insertError);
-                return res.status(500).json({ error: '注册失败，请重试' });
+                console.error('Auto-register error:', JSON.stringify(insertError));
+                return res.status(500).json({ error: '注册失败: ' + (insertError.message || '未知错误') });
             }
 
             const token = generateToken();
@@ -172,7 +176,7 @@ module.exports = async function handler(req, res) {
             });
         }
     } catch (error) {
-        console.error('Auth error:', error);
-        return res.status(500).json({ error: '服务器错误' });
+        console.error('Auth error:', error.message, error.stack);
+        return res.status(500).json({ error: '服务器错误: ' + error.message });
     }
 };
